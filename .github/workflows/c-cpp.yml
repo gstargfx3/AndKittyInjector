@@ -29,10 +29,17 @@ jobs:
           echo "NDK_HOME=$HOME/android-ndk/android-ndk-r27c" >> $GITHUB_ENV
           echo "$HOME/android-ndk/android-ndk-r27c" >> $GITHUB_PATH
 
+     
+
       - name: Build with ndk-build
         run: |
-          export NDK_HOME=$HOME/android-ndk/android-ndk-r27c  # Ensure the path is correct
-          make all
+          export NDK_HOME=$HOME/android-ndk/android-ndk-r27c
+          $NDK_HOME/ndk-build -j16 -B \
+            NDK_PROJECT_PATH=. \
+            NDK_APPLICATION_MK=./Application.mk
+            
+
+          
 
       - name: Upload Artifact (Optional)
         uses: actions/upload-artifact@v4
