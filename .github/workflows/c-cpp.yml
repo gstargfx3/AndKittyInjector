@@ -1,23 +1,33 @@
-name: C/C++ CI
+name: Build AndKittyInjector
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use a Linux environment
 
     steps:
-    - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y clang cmake make git
+
+      - name: Build Project
+        run: |
+          chmod +x build.sh  # Ensure your build script is executable
+          ./build.sh  # Run your build script
+          
+      - name: Upload Artifact (Optional)
+        uses: actions/upload-artifact@v3
+        with:
+          name: AndKittyInjector
+          path: build/output/  # Adjust this based on your output path
