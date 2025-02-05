@@ -21,22 +21,21 @@ jobs:
           sudo apt update
           sudo apt install -y wget unzip make
 
-      - name: Setup Android NDK
+      - name: Download & Setup Android NDK
         run: |
-          export NDK_VERSION="26.1.10909125"  # Change this if needed
-          wget https://dl.google.com/android/repository/android-ndk-r${NDK_VERSION}-linux.zip -O ndk.zip
+          wget https://dl.google.com/android/repository/android-ndk-r27c-linux.zip -O ndk.zip
           unzip ndk.zip -d $HOME/android-ndk
           rm ndk.zip
-          echo "NDK_HOME=$HOME/android-ndk/android-ndk-r${NDK_VERSION}" >> $GITHUB_ENV
-          echo "$HOME/android-ndk/android-ndk-r${NDK_VERSION}" >> $GITHUB_PATH
+          echo "NDK_HOME=$HOME/android-ndk/android-ndk-r27c" >> $GITHUB_ENV
+          echo "$HOME/android-ndk/android-ndk-r27c" >> $GITHUB_PATH
 
       - name: Build with ndk-build
         run: |
-          export NDK_HOME=$HOME/android-ndk/android-ndk-r26.1.10909125  # Ensure the path is correct
+          export NDK_HOME=$HOME/android-ndk/android-ndk-r27c  # Ensure the path is correct
           make all
 
       - name: Upload Artifact (Optional)
         uses: actions/upload-artifact@v4
         with:
           name: AndKittyInjector
-          path: libs/  # Adjust this based on where your built files are
+          path: libs/  # Adjust if needed
