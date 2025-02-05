@@ -25,9 +25,9 @@ jobs:
         run: |
           chmod +x build.sh  # Ensure your build script is executable
           ./build.sh  # Run your build script
-          
+
       - name: Upload Artifact (Optional)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # Fixed version
         with:
           name: AndKittyInjector
           path: build/output/  # Adjust this based on your output path
