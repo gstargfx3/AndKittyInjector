@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Use a Linux environment
+    runs-on: ubuntu-latest  # Use Ubuntu as the build environment
 
     steps:
       - name: Checkout Repository
@@ -19,15 +19,24 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt update
-          sudo apt install -y clang cmake make git
+          sudo apt install -y wget unzip make
 
-      - name: Build Project
+      - name: Setup Android NDK
         run: |
-          chmod +x build.sh  # Ensure your build script is executable
-          ./build.sh  # Run your build script
+          export NDK_VERSION="26.1.10909125"  # Change this if needed
+          wget https://dl.google.com/android/repository/android-ndk-r${NDK_VERSION}-linux.zip -O ndk.zip
+          unzip ndk.zip -d $HOME/android-ndk
+          rm ndk.zip
+          echo "NDK_HOME=$HOME/android-ndk/android-ndk-r${NDK_VERSION}" >> $GITHUB_ENV
+          echo "$HOME/android-ndk/android-ndk-r${NDK_VERSION}" >> $GITHUB_PATH
+
+      - name: Build with ndk-build
+        run: |
+          export NDK_HOME=$HOME/android-ndk/android-ndk-r26.1.10909125  # Ensure the path is correct
+          make all
 
       - name: Upload Artifact (Optional)
-        uses: actions/upload-artifact@v4  # Fixed version
+        uses: actions/upload-artifact@v4
         with:
           name: AndKittyInjector
-          path: build/output/  # Adjust this based on your output path
+          path: libs/  # Adjust this based on where your built files are
